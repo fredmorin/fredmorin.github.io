@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Population Density Map</title>
+  <script src="https://cdn.jsdelivr.net/npm/ol@v7.2.2/dist/ol.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.2.2/ol.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/elm-pep@1.0.6/dist/elm-pep.js"></script>
+  <script src="/assets/js/bootstrap.bundle.min.js"></script>
+  <link href="census-demo.css" rel="stylesheet">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HFV2MJVXPD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HFV2MJVXPD');
+  </script>
+</head>
+<body>
+
+<div class="meta-legend">
+  <h2>Census Canada</h2>
+  <div class='legend'>
+    <div class='legend-title'>Population Density (2021)</div>
+    <div class='legend-scale'>
+      <ul class='legend-labels'>
+        <li><span style='background:#c1e7ff;'></span><= 10/km2</li>
+        <li><span style='background:#abd2ec;'></span><= 100/km2</li>
+        <li><span style='background:#94bed9;'></span><= 500/km2</li>
+        <li><span style='background:#7faac6;'></span><= 2 000/km2</li>
+        <li><span style='background:#6996b3;'></span><= 5 000/km2</li>
+        <li><span style='background:#5383a1;'></span><= 10 000/km2</li>
+        <li><span style='background:#3d708f;'></span><= 15 000/km2</li>
+        <li><span style='background:#255e7e;'></span><= 20 000/km2</li>
+        <li><span style='background:#004c6d;'></span><= 50 000/km2</li>
+        <li><span style='background:#00354d;'></span>> 50 000/km2</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="map"></div>
+<div style="display: none;">
+  <div id="popup"></div>
+</div>
+<div class="meta-footer">
+  <div class="footer">
+    <p >Visit: <a href="/" class="text-black">SequelFirst</a> ©, by <a href="https://twitter.com/quekqc" class="text-black">@quekqc</a>.</p>
+  </div>
+</div>
+
+<script src="census-demo.js"></script>
+
+</body>
+</html>
