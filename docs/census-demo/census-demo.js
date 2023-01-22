@@ -60,10 +60,6 @@ function getStyle(tenth) {
   return new ol.style.Style({
     fill: new ol.style.Fill({
       color: tenthColor
-    }),
-    stroke:new ol.style.Stroke({
-      color: tenthColorNoAlpha,
-      width: .5
     })
   });
 }
