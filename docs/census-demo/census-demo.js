@@ -111,7 +111,7 @@ var censusSubdivisionsLayer = new ol.layer.VectorTile({
     style: styleFunction,
     extent: canadaExtent,
     minZoom: 0,
-    maxZoom: disseminationAreasMinZoom + 1 
+    maxZoom: disseminationAreasMinZoom
   });
 var disseminationAreasLayer = new ol.layer.VectorTile({
     source: new ol.source.VectorTile({
@@ -124,7 +124,7 @@ var disseminationAreasLayer = new ol.layer.VectorTile({
     style: styleFunction,
     extent: canadaExtent,
     minZoom: disseminationAreasMinZoom,
-    maxZoom: disseminationBlocksMinZoom + 1    
+    maxZoom: disseminationBlocksMinZoom
   });
 var disseminationBlocksLayer = new ol.layer.VectorTile({
     source: new ol.source.VectorTile({
@@ -207,7 +207,8 @@ var map = new ol.Map({
   target: 'map',
   view: new ol.View({
     center: ol.proj.transform(center,'EPSG:4326','EPSG:3857'),
-    zoom: zoom
+    zoom: zoom,
+    maxZoom: 16,
   }),
   layers: [baseLayer,selectionLayerGroup,layerGroup]
 });
