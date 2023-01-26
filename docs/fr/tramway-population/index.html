@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en" class="h-100">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Tramway de Québec - Analyse Population">
+    <meta name="author" content="Frederic Morin">
+    <meta name="keywords" content="Tramway de Québec - Analyse Population">
+    <title>SequelFirst - Tramway de Québec - Analyse Population</title>
+    <link rel="canonical" href="https://sequelfirst.com">
+    <script src="https://cdn.jsdelivr.net/npm/ol@v7.2.2/dist/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.2.2/ol.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/elm-pep@1.0.6/dist/elm-pep.js"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HFV2MJVXPD"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-HFV2MJVXPD');
+    </script>
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+    </style>
+
+    
+    <link href="/sequelfirst.css" rel="stylesheet">
+    <link href="tramway.css" rel="stylesheet">
+  </head>
+  <body class="d-flex text-left text-bg-dark">
+    
+<div class="sequelfirst-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+  <header class="mb-auto">
+    <div>
+      <h3 class="float-md-start mb-0">SequelFirst</h3>
+      <nav class="nav nav-masthead justify-content-left float-md-end">
+        <a class="nav-link fw-bold py-1 px-0 " href="/fr">Acceuil</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="px-3">
+
+      <h1>Tramway de Québec - Analyse Population</h1>
+      <h2>Objectif</h2>
+      <p>Cet exercise consiste simplement et uniquement à croiser les données disponibles pour le projet de tramway de la ville de Québec avec les données de population de Recensement Canada de 2021, a documenter les résultats et à proposer une carte interractive pour la visualisation des données calculés au cours de cet exercice.</p>
+      <p>Cet exercice ne réalise aucune analyse des destination, et n'émêt pas d'opinion ou de recomandation envers le projet de tramway de la Ville de Québec. Il n'a pour objectif d'apporter des informations complémentaires aux informations accessibles au grand publique.</p>
+      <p>D'autres publications sont à venir concernnant le projet de tramway de la Ville de Québec.</p>
+      <h2>Carte</h2>
+      <p>La carte suivante présentte le projet de Tramway croisé avec les données populationelles.</p>
+      <ul>
+        <li>Les stations et les pôles d'échanges sont représentés par des points orange, surligné en blanc.</li>
+        <li>Le trajet à l'étude est représenté en orange.</li>
+        <li>Les cercles représentent un rayon de 1km autour de chacune des stations.</li>
+        <li>Les polygones noirs, représentent la superficie prise en compte pour croiser avec les données populationelles de Recensement Canada.</li>  
+        <li>Les données de population de Recensement Canada sont représentés par un dégradé de bleu.</li>
+        <li>Le fond de carte provient de la carte publique IGO du Gouvernement du Québec.</li>
+      </ul>
+      <p>Je vous invite à vous référer à la carte officielle du tramway de Québec: <a class="link-light" href="https://tramwaydequebec.info/carte/">https://tramwaydequebec.info/carte/</a></p>
+      <div id="map" class="w-100 p-3 mx-auto-float-md-end" style="height: 600px;"></div>
+      <div style="display: none;">
+        <div id="popup" class="popup"></div>
+      </div>
+      <h2>Les chiffres</h2>
+      <p>En utilisant un rayon a vol d'oiseau de 1km des stations, et en croisant le cercle résultant avec les polygones de |dessimation blocks| de Recencement Canada, et en ne concervant que les blocks qui sont 100% à l'intérieur du rayon de 1km des stations, nous pouvons déterminer que <strong>156 350 citoyens</strong> habitent à l'intérieur de 1 km d'une station de tramway.</p>
+      <p>La population totale de Québec est de <strong>549 459 habitants</strong>, le pourcentage de la population habitant a moins de 1km d'une station est de <strong>28,46%</strong>.</p>
+      <p>En y ajoutant les villes de Saint-Augustin (19 907), Ancienne-Lorette (16 970), et Notre-Dame-Des-Anges (241), on arrive a un total de <strong>586 577 habitants</strong>, ce qui fait baisser ce pourcentage à <strong>26,65%</strong>.</p>
+      <p>Les données par stations: <em>Attention, plusieurs citoyens habitent à moins de 1km de plus d'une station. La somme des nombres rapportés dans le tableau suivant sera donc supérieur à 156 350, et incorrecte.</em></p>
+      <table class="table table-dark">
+      <thead>
+      <tr>
+      <th>Station</th>
+      <th>Type</th>
+      <th>Population (1km)</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+      <td>D'Estimauville</td>
+      <td>pole</td>
+      <td>5697</td>
+      </tr>
+      <tr>
+      <td>de Sainte-Foy</td>
+      <td>pole</td>
+      <td>5464</td>
+      </tr>
+      <tr>
+      <td>de Saint-Roch</td>
+      <td>pole</td>
+      <td>17086</td>
+      </tr>
+      <tr>
+      <td>de l'Université Laval</td>
+      <td>pole</td>
+      <td>3287</td>
+      </tr>
+      <tr>
+      <td>Le Gendre</td>
+      <td>pole</td>
+      <td>2377</td>
+      </tr>
+      <tr>
+      <td>Hôpital l'Enfant-Jésus</td>
+      <td>station</td>
+      <td>10653</td>
+      </tr>
+      <tr>
+      <td>McCartney</td>
+      <td>station</td>
+      <td>8891</td>
+      </tr>
+      <tr>
+      <td>Pie-XII</td>
+      <td>station</td>
+      <td>7758</td>
+      </tr>
+      <tr>
+      <td>Bégon</td>
+      <td>station</td>
+      <td>9819</td>
+      </tr>
+      <tr>
+      <td>Duchesneau</td>
+      <td>station</td>
+      <td>8104</td>
+      </tr>
+      <tr>
+      <td>Roland-Beaudin</td>
+      <td>station</td>
+      <td>7381</td>
+      </tr>
+      <tr>
+      <td>Place Sainte-Foy</td>
+      <td>station</td>
+      <td>3102</td>
+      </tr>
+      <tr>
+      <td>Desjardins</td>
+      <td>station</td>
+      <td>3829</td>
+      </tr>
+      <tr>
+      <td>Myrand</td>
+      <td>station</td>
+      <td>5895</td>
+      </tr>
+      <tr>
+      <td>Maguire</td>
+      <td>station</td>
+      <td>9687</td>
+      </tr>
+      <tr>
+      <td>Holland</td>
+      <td>station</td>
+      <td>9917</td>
+      </tr>
+      <tr>
+      <td>Collège Saint-Charles-Garnier</td>
+      <td>station</td>
+      <td>11817</td>
+      </tr>
+      <tr>
+      <td>Belvédère</td>
+      <td>station</td>
+      <td>13067</td>
+      </tr>
+      <tr>
+      <td>Jean-Paul-L'Allier</td>
+      <td>station</td>
+      <td>18930</td>
+      </tr>
+      <tr>
+      <td>Colline Parlementaire</td>
+      <td>station</td>
+      <td>16979</td>
+      </tr>
+      <tr>
+      <td>D'Youville</td>
+      <td>station</td>
+      <td>14029</td>
+      </tr>
+      <tr>
+      <td>Bardy</td>
+      <td>station</td>
+      <td>10900</td>
+      </tr>
+      <tr>
+      <td>De Courtemanche</td>
+      <td>station</td>
+      <td>9592</td>
+      </tr>
+      <tr>
+      <td>Brown</td>
+      <td>station</td>
+      <td>19549</td>
+      </tr>
+      <tr>
+      <td>Cartier</td>
+      <td>station</td>
+      <td>23232</td>
+      </tr>
+      <tr>
+      <td>CHUL</td>
+      <td>station</td>
+      <td>5314</td>
+      </tr>
+      <tr>
+      <td>Chaudière</td>
+      <td>station</td>
+      <td>666</td>
+      </tr>
+      <tr>
+      <td>3e Avenue</td>
+      <td>station</td>
+      <td>14968</td>
+      </tr>
+      <tr>
+      <td>Cégep-Limoilou</td>
+      <td>station</td>
+      <td>13226</td>
+      </tr>
+      </tbody>
+      </table>
+      <h2>Sources</h2>
+      <p>Toutes les information sur le projet de tramway proviennent du site officiel du projet:</p>
+      <ul>
+        <li><a class="link-light" href="https://tramwaydequebec.info/carte/">https://tramwaydequebec.info/carte/</a></li>
+      </ul>
+      <p>Toutes les données sur la population proviennent de Recensement Canada:</p>
+      <ul>
+        <li><a class="link-light" href="https://geosuite.statcan.gc.ca/geosuite/en/index">https://geosuite.statcan.gc.ca/geosuite/en/index</a></li>
+        <li><a class="link-light" href="https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/index-eng.cfm">https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/index-eng.cfm</a></li>
+        </ul>
+      <p>La couche de base provient des services IGO du Gouvernement du Québec:</p>
+      <ul>
+        <li><a class="link-light" href="https://www.igouverte.org/documentation/page-services-igo/">https://www.igouverte.org/documentation/page-services-igo/</a></li>
+      </ul>
+     
+      <h2>Plus d'information</h2>
+      <p>Pour plus d'information, contactez moi!</p>
+  
+  </main>
+
+  <footer class="mt-auto text-white-50">
+  <p>SequelFirst © by Fred Morin
+    <a href="https://twitter.com/quekqc"><img width="32" height="32" src="/assets/twitter.svg"></a>.
+    <a href="https://www.linkedin.com/in/fr%C3%A9d%C3%A9ric-morin-0a97a868"><img width="32" height="32" src="/assets/linkedin.svg"></a>
+    <a href="https://github.com/fredmorin"><img width="32" height="32" src="/assets/github.svg"></a>
+  </p>
+  </footer>
+  </div>
+  <script src="tramway.js"></script>
+  </body>
+</html>
