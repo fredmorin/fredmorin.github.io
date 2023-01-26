@@ -146,7 +146,7 @@ var trajetStyle = new ol.style.Style({
 });  
 var db1km = new ol.layer.Vector({
   source: new ol.source.Vector({
-    url: '/geojson/tramway/dessimation-blocks-contains-1km-tramway-station-union.json',
+    url: '/geojson/tramway/dissemination-blocks-contains-1km-tramway-station-union.json',
     format: new ol.format.GeoJSON() 
   }),
   style: dbWithin1kStyle,
