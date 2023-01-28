@@ -61,25 +61,25 @@ function styleFunction(feature, resolution) {
     tenth = 0;
 
     if(val <= 10)
-      tenth = 0
-    else if(val <= 100)
-      tenth = 0;
-    else if(val <= 500)
-      tenth =  1;
-    else if(val <= 1000)
-      tenth =  4;
-    else if(val <= 2500)
-      tenth =  5;
-    else if(val <= 5000)
-      tenth =  6;
-    else if(val <= 7500)
-      tenth =  7;
-    else if(val <= 10000)
-      tenth =  8;
-    else if(val <= 20000)
-      tenth =  9;
-    else if(val > 20000)
-      tenth =  10;
+    tenth = 0
+  else if(val <= 100)
+    tenth = 0;
+  else if(val <= 500)
+    tenth =  1;
+  else if(val <= 1000)
+    tenth =  4;
+  else if(val <= 2500)
+    tenth =  5;
+  else if(val <= 5000)
+    tenth =  6;
+  else if(val <= 7500)
+    tenth =  7;
+  else if(val <= 10000)
+    tenth =  8;
+  else if(val <= 20000)
+    tenth =  9;
+  else if(val > 20000)
+    tenth =  10;
 
     if(!styleCache[tenth]) {
       styleCache[tenth] = getStyle(tenth);
@@ -124,10 +124,8 @@ var tramwayStationBuffer1km = new ol.layer.Vector({
     format: new ol.format.GeoJSON() 
   }),
   style: new ol.style.Style({
-    stroke: new ol.style.Stroke({
-      color: '#444444',
-      width: 1,
-    })
+    stroke: null,
+    fill: null
   }),
   extent: quebecExtent
 });
@@ -205,17 +203,17 @@ var stations = new ol.layer.Vector({
 var selectionLayer = new ol.layer.Vector({
   map: map,
   renderMode: 'vector',
-  source: stations.getSource(),
+  source: tramwayStationBuffer1km.getSource(),
   extent: quebecExtent,
   style: function (feature) {
     if(!!selection)
-    if (feature.getProperties().objectid == selection.getProperties().objectid) {
+    if (feature.getProperties().nom == selection.getProperties().nom) { // TODO: comparer par id, mais il n'est pas disponible sur la station. uniquement sur le buffer.
       return selectedStyle;
     }
   },
 });
 
-var layerGroup = new ol.layer.Group({layers:[ disseminationBlocksLayer, db1km, trajet, tramwayStationBuffer1km, stations]});
+var layerGroup = new ol.layer.Group({layers:[ disseminationBlocksLayer, trajet, tramwayStationBuffer1km, stations]});
 var selectionLayerGroup = new ol.layer.Group({layers:[selectionLayer]});
 
 var map = new ol.Map({
@@ -263,23 +261,18 @@ const popup = new ol.Overlay({
 const element = popup.getElement();
 map.addOverlay(popup);
 
-map.on(['click','pointermove'], function (event) {
+map.on(['click'], function (event) {
 
-  if(map.getView().getZoom() <= stations.getMinZoom() || map.getView().getZoom() >  stations.getMaxZoom()) {
-    stations = null;
-    selectionLayer.changed();      
-  }
-  else {
-    stations.getFeatures(event.pixel).then(function (features) {
-      var feature = null;
-      if (features.length) {
-        feature = features[0];
-      } 
-      selection = feature;
-      displayPopup(event, feature);
-      stations.changed();    
-    });
-  } 
+
+  stations.getFeatures(event.pixel).then(function (features) {
+    var feature = null;
+    if (features.length) {
+      feature = features[0];
+    } 
+    selection = feature;
+    displayPopup(event, feature);
+    selectionLayer.changed();    
+  });
 });
 
 function displayPopup(event, feature) {
@@ -297,7 +290,8 @@ function displayPopup(event, feature) {
       content: '<b>Population (1km)</b>: ' + parseInt(feature.getProperties().population, 10).toLocaleString('fr-CA') + '</br><b>Type:</b> ' + feature.getProperties().type + '</br><b>Description:</b> ' + feature.getProperties().description ,
       html: true,
       placement: 'top',
-      title: 'Station '  + feature.getProperties().nom
+      title: 'Station '  + feature.getProperties().nom,
+      offset:'50,50'
     });
     popover.show();
   }
